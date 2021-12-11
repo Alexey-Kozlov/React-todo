@@ -29,12 +29,9 @@ export default class App extends React.Component {
   }
 
   insertItem = () => {
-
     this.setState(({ todoData }) =>{
-      let newArray = [];
       let maxIndex = 0;
       if(todoData.length > 0){
-        newArray = JSON.parse(JSON.stringify(todoData));
         maxIndex = Math.max(...todoData.map((item) => item.id));
       }
       const newItem = {
@@ -42,12 +39,18 @@ export default class App extends React.Component {
         label: "чтото новое " + maxIndex.toString(),
         important: false
       };
-      newArray.push(newItem);
       return {
-        todoData: newArray
+        todoData: [...todoData, newItem]
       }
     })
+  }
 
+  onToggleImportant = (id) =>{
+    console.log('imp ', id);
+  }
+
+  onToggleDone = (id) => {
+    console.log('done ', id);
   }
 
   render () { 
@@ -61,6 +64,8 @@ export default class App extends React.Component {
       <ToDoList 
         onDeleted = { this.deleteItem }
         todoData = { this.state.todoData }
+        onToggleImportant = { this.onToggleImportant}
+        onToggleDone = { this.onToggleDone}
         />
       <ItemAdd itemAdded={ this.insertItem }></ItemAdd>
     </div>  

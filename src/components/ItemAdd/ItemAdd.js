@@ -6,7 +6,7 @@ export default class ItemAdd extends React.Component {
         const { itemAdded } = this.props;
         return (
             <button type="button"
-            className = "btn btn-secondary"
+            className = "btn btn-outline-secondary item-add"
             onClick= { itemAdded } >Вставить</button>
         )
     }
