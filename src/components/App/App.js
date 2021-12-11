@@ -1,9 +1,10 @@
 import React from 'react';
-import AppHeader from '../AppHeader'
+import AppHeader from '../AppHeader';
 import SearchPanel from '../SearchPanel';
 import ToDoList from '../ToDoList';
 import ItemStatusFilter from '../ItemStatusFilter';
-import './App.css'
+import ItemAdd from '../ItemAdd';
+import './App.css';
 
 export default class App extends React.Component {
 
@@ -27,6 +28,28 @@ export default class App extends React.Component {
     })
   }
 
+  insertItem = () => {
+
+    this.setState(({ todoData }) =>{
+      let newArray = [];
+      let maxIndex = 0;
+      if(todoData.length > 0){
+        newArray = JSON.parse(JSON.stringify(todoData));
+        maxIndex = Math.max(...todoData.map((item) => item.id));
+      }
+      const newItem = {
+        id: maxIndex + 1,
+        label: "чтото новое " + maxIndex.toString(),
+        important: false
+      };
+      newArray.push(newItem);
+      return {
+        todoData: newArray
+      }
+    })
+
+  }
+
   render () { 
     return(
     <div>
@@ -39,6 +62,7 @@ export default class App extends React.Component {
         onDeleted = { this.deleteItem }
         todoData = { this.state.todoData }
         />
+      <ItemAdd itemAdded={ this.insertItem }></ItemAdd>
     </div>  
     );
    };
