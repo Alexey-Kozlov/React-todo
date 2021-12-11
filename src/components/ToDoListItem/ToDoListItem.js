@@ -27,7 +27,7 @@ onMarkImportant = () => {
 };
 
 render() {
-    const { label } = this.props;
+    const { label, onDeleted } = this.props;
     const {done, important} = this.state;
 
     let classNames = 'todo-list-item';
@@ -51,7 +51,8 @@ render() {
           <FontAwesomeIcon icon={faExclamation} />
       </button>
       <button type="button"
-          className="btn btn-outline-danger btn-sm float-end">
+          className="btn btn-outline-danger btn-sm float-end"
+          onClick={ onDeleted }>
           <FontAwesomeIcon icon={faTrash} />
       </button>
     </span>   
