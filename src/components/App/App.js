@@ -16,11 +16,8 @@ export default class App extends React.Component {
       this.createToDoItem('Make some app'),
       this.createToDoItem('Have a lunch')
     ],
-    unfilteredData:[
-      this.createToDoItem('Drink coffe'),
-      this.createToDoItem('Make some app'),
-      this.createToDoItem('Have a lunch')
-    ]
+    searchExp: '',
+    filterExp: ''
   };
 
   deleteItem = (id) => {
@@ -29,8 +26,7 @@ export default class App extends React.Component {
       const newArray = JSON.parse(JSON.stringify(todoData));//deep copy
       newArray.splice(index, 1);//удаление элемента      
       return {
-        todoData: newArray,
-        unfilteredData: newArray
+        todoData: newArray
       }
     })
   }
@@ -48,8 +44,7 @@ export default class App extends React.Component {
     this.setState(({ todoData, unfilteredData }) =>{
       const newItem = this.createToDoItem(label);
       return {
-        todoData: [...todoData, newItem],
-        unfilteredData: [...todoData, newItem]
+        todoData: [...todoData, newItem]
       }
     })
   }
@@ -65,14 +60,12 @@ export default class App extends React.Component {
   onToggleDone = (id) => {
     this.setState(({ todoData }) =>{      
       return {
-        todoData: this.toggleProperty(todoData, id, 'done'),
-        unfilteredData: this.toggleProperty(todoData, id, 'done')
+        todoData: this.toggleProperty(todoData, id, 'done')
       };
     })
   }
 
   toggleProperty(arr, id, propName){
-
       const index = arr.findIndex((item) => item.id === id);
       const oldItem = arr[index];
       const newItem = {...oldItem, [propName]: !oldItem[propName]};
@@ -84,38 +77,55 @@ export default class App extends React.Component {
   }
 
   searchChanged = (searchText) => {
-    const filterItems = this.state.unfilteredData.filter((item) => item.label.includes(searchText));
-    this.setState(({ todoData }) =>{      
-      return {
-        todoData: filterItems
-      };
-    })
+    this.setState({      
+        searchExp: searchText
+    });
+  }
+
+  visibleData () {    
+    if(this.state.searchExp.length > 0){
+      switch(this.state.filterExp){
+        case '':
+          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp));
+          break;
+        case 'active':
+          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp) && !item.done);
+          break;
+        case 'done':
+          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp) && item.done);
+          break;
+      }
+    } else {
+      switch(this.state.filterExp){
+        case '':
+          return this.state.todoData;
+          break;
+        case 'active':
+          return this.state.todoData.filter((item) => !item.done);
+          break;
+        case 'done':
+          return this.state.todoData.filter((item) => item.done);
+          break;
+      }
+    }
   }
 
   allItemsFilterClick = () =>{
-    this.setState(({ todoData }) =>{      
-      return {
-        todoData: this.state.unfilteredData
-      };
-    })
+    this.setState({      
+      filterExp: ''
+  });
   }
 
   activeItemsFilterClick = () =>{
-    const filterItems = this.state.unfilteredData.filter((item) => !item.done);
-    this.setState(({ todoData }) =>{      
-      return {
-        todoData: filterItems
-      };
-    })
+    this.setState({      
+      filterExp: 'active'
+  });
   }
 
   doneItemsFilterClick = () =>{
-    const filterItems = this.state.unfilteredData.filter((item) => item.done);
-    this.setState(({ todoData }) =>{      
-      return {
-        todoData: filterItems
-      };
-    })
+    this.setState({      
+      filterExp: 'done'
+  });
   }
 
   render () { 
@@ -123,7 +133,6 @@ export default class App extends React.Component {
     const doneCount = this.state.todoData.filter((item) => item.done ).length;
     const todoCount = this.state.todoData.length - doneCount;
     
-
     return(
     <div>
       <AppHeader todo={todoCount} done={doneCount} />
@@ -137,7 +146,7 @@ export default class App extends React.Component {
         </div>
       <ToDoList 
         onDeleted = { this.deleteItem }
-        todoData = { this.state.todoData }
+        todoData = { this.visibleData() }
         onToggleImportant = { this.onToggleImportant}
         onToggleDone = { this.onToggleDone}
         />
