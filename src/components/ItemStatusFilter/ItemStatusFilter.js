@@ -3,15 +3,20 @@ import React from 'react';
 import './ItemStatusFilter.css';
 
 export default class ItemStatusFilter extends React.Component {
+
   render() {
+    let defaultClassName = 'btn btn-outline-primary btn-default';
     return (
-      <div className="btn-group">
+      <div  >
         <button type="button"
-              className="btn btn-info">All</button>
-        <button type="button"
-              className="btn btn-outline-secondary">Active</button>
-        <button type="button"
-              className="btn btn-outline-secondary">Done</button>
+            onClick = { () => this.props.allItemsClick() }
+            className= { defaultClassName }>All</button>
+        <button  type="button"
+            onClick = { () => this.props.activeItemsClick() }
+            className={ defaultClassName }>Active</button>
+        <button  type="button"
+             onClick = { () => this.props.doneItemsClick() }
+            className={ defaultClassName }>Done</button>
       </div>
     );
   };
