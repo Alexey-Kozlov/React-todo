@@ -95,19 +95,15 @@ export default class App extends React.Component {
     switch(this.state.filterExp){
       case '':
         return arr;
-        break;
       case 'active':
         return arr.filter((item) => !item.done);
-        break;
       case 'done':
         return arr.filter((item) => item.done);
-        break;
     }
   }
 
   visibleData () { 
-    const searchItems = this.searchItems(this.state.todoData);
-    return this.filterData(searchItems);
+    return this.filterData(this.searchItems(this.state.todoData));
   }
 
   allItemsFilterClick = () =>{
@@ -142,6 +138,7 @@ export default class App extends React.Component {
             allItemsClick = { this.allItemsFilterClick }
             activeItemsClick = { this.activeItemsFilterClick }
             doneItemsClick = { this.doneItemsFilterClick }
+            filterExp = { this.state.filterExp }
           />
         </div>
       <ToDoList 
