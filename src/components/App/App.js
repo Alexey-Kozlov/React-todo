@@ -82,32 +82,32 @@ export default class App extends React.Component {
     });
   }
 
-  visibleData () {    
+  searchItems(arr){
     if(this.state.searchExp.length > 0){
-      switch(this.state.filterExp){
-        case '':
-          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp));
-          break;
-        case 'active':
-          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp) && !item.done);
-          break;
-        case 'done':
-          return this.state.todoData.filter((item) => item.label.includes(this.state.searchExp) && item.done);
-          break;
-      }
+      return arr.filter((item) => 
+      item.label.toLowerCase().includes(this.state.searchExp.toLowerCase()));
     } else {
-      switch(this.state.filterExp){
-        case '':
-          return this.state.todoData;
-          break;
-        case 'active':
-          return this.state.todoData.filter((item) => !item.done);
-          break;
-        case 'done':
-          return this.state.todoData.filter((item) => item.done);
-          break;
-      }
+      return arr;
     }
+  }
+
+  filterData(arr){
+    switch(this.state.filterExp){
+      case '':
+        return arr;
+        break;
+      case 'active':
+        return arr.filter((item) => !item.done);
+        break;
+      case 'done':
+        return arr.filter((item) => item.done);
+        break;
+    }
+  }
+
+  visibleData () { 
+    const searchItems = this.searchItems(this.state.todoData);
+    return this.filterData(searchItems);
   }
 
   allItemsFilterClick = () =>{
