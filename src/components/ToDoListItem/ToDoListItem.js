@@ -6,10 +6,10 @@ import { faExclamation, faTrash } from '@fortawesome/free-solid-svg-icons';
 export default class ToDoListItem extends React.Component {
 
 render() {
-    const { label, 
+    const { id,
+      label, 
       onDeleted, 
-      onToggleDone, 
-      onToggleImportant,
+      editProperty,
       done,
       important} = this.props;
 
@@ -27,10 +27,10 @@ render() {
   return (
     <span className = {classNames}>
       <span className="todo-list-item-label" 
-      onClick = { onToggleDone } >{label}</span>
+      onClick = { () => editProperty(id,'done',!done) } >{label}</span>
       <button type="button"
           className= { exclaimButtonDefaultStyle }
-          onClick={ onToggleImportant }>
+          onClick={ () => editProperty(id,'important',!important) }>
           <FontAwesomeIcon icon={faExclamation} />
       </button>
       <button type="button"
